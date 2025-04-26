@@ -10,7 +10,7 @@ import SpriteKit
 
 class PegNode: SKShapeNode {
 
-    init(position: CGPoint, radius: CGFloat = 10.0) {
+    init(position: CGPoint, radius: CGFloat = 1.0) {
         super.init()
         
         self.position = position
