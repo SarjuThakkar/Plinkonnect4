@@ -9,7 +9,7 @@ import SpriteKit
 import GameplayKit
 
 enum GameState {
-    case waitingForInput, ballFalling, checkingWin, gameOver
+    case waitingForInput, ballFalling, gameOver
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -62,30 +62,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
 
-        guard gameState != .gameOver else { return }
+        finalizeBallPositions()
+        checkForWin()
         guard gameState == .waitingForInput else { return }
 
         // Clamp y to just below the top edge
         let yPosition = size.height - 10
         let xPosition = location.x
-        finalizeBallPositions()
-        checkForWin()
         spawnBall(at: CGPoint(x: xPosition, y: yPosition))
     }
 
     private func spawnBall(at position: CGPoint) {
         let radius = columnWidth * 0.4
-        let ball = BallNode(position: position, radius: radius)
-
-        switch currentPlayer {
-        case .red:
-            ball.fillColor = .red
-        case .yellow:
-            ball.fillColor = .yellow
-        }
-
+        let ball = BallNode(position: position, radius: radius, owner: currentPlayer)
         // already configured in BallNode
-
         gameState = .ballFalling
         addChild(ball)
         lastBall = ball

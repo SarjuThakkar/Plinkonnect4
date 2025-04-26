@@ -8,13 +8,17 @@
 
 import SpriteKit
 
-class BallNode: SKShapeNode {
 
-    init(position: CGPoint, radius: CGFloat = 10.0) {
+class BallNode: SKShapeNode {
+    let owner: BoardManager.Player
+
+    init(position: CGPoint, radius: CGFloat = 10.0, owner: BoardManager.Player) {
+        self.owner = owner
         super.init()
 
         self.position = position
         self.path = CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2), transform: nil)
+        self.fillColor = owner == .red ? .red : .yellow
         self.strokeColor = .white
         self.lineWidth = 2
         self.zPosition = 2

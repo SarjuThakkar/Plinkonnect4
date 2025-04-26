@@ -17,9 +17,10 @@ class BoardManager {
     func finalizeBallPositions(in scene: SKScene, columnWidth: CGFloat) {
         gameGrid = Array(repeating: Array(repeating: nil, count: 6), count: 7)
 
-        for node in scene.children where node is BallNode {
-            guard let body = node.physicsBody else { continue }
-            let position = node.position
+        let sortedBalls = scene.children.compactMap { $0 as? BallNode }.sorted(by: { $0.position.y < $1.position.y })
+        for ball in sortedBalls {
+            guard let body = ball.physicsBody else { continue }
+            let position = ball.position
 
             let boardHeight = columnWidth * 6 * 0.8
             guard position.y <= boardHeight else { continue }
@@ -28,8 +29,7 @@ class BoardManager {
             let row = gameGrid[column].firstIndex(where: { $0 == nil }) ?? -1
             guard row >= 0 && column >= 0 && column < gameGrid.count && row < gameGrid[column].count else { continue }
 
-            let player: Player = (node is BallNode && (node as! BallNode).fillColor == .red) ? .red : .yellow
-            gameGrid[column][row] = player
+            gameGrid[column][row] = ball.owner
         }
     }
 
